@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/723542171943980337/7f32ccd2d26e47e2859aa49f4e28ddae/artifacts
+end_time: 1740853092231
+entry_point_name: ''
+experiment_id: '723542171943980337'
+lifecycle_stage: active
+run_id: 7f32ccd2d26e47e2859aa49f4e28ddae
+run_name: adventurous-toad-309
+run_uuid: 7f32ccd2d26e47e2859aa49f4e28ddae
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740853050519
+status: 3
+tags: []
+user_id: vic_p

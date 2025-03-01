@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/723542171943980337/9a07c3f7da6e429980f902127a7ef4ef/artifacts
+end_time: 1740853092231
+entry_point_name: ''
+experiment_id: '723542171943980337'
+lifecycle_stage: active
+run_id: 9a07c3f7da6e429980f902127a7ef4ef
+run_name: chill-lark-896
+run_uuid: 9a07c3f7da6e429980f902127a7ef4ef
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740853050519
+status: 3
+tags: []
+user_id: vic_p
