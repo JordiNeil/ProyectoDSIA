@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/769648656092666642
+creation_time: 1740851078992
+experiment_id: '769648656092666642'
+last_update_time: 1740851078992
+lifecycle_stage: active
+name: dsia/salesPrice/JordiModelsRFGridSearchCV

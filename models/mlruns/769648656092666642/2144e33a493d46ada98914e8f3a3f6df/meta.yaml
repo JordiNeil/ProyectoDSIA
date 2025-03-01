@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/769648656092666642/2144e33a493d46ada98914e8f3a3f6df/artifacts
+end_time: 1740852017091
+entry_point_name: ''
+experiment_id: '769648656092666642'
+lifecycle_stage: active
+run_id: 2144e33a493d46ada98914e8f3a3f6df
+run_name: random-forest-GridSearchCV
+run_uuid: 2144e33a493d46ada98914e8f3a3f6df
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740851845360
+status: 3
+tags: []
+user_id: vic_p

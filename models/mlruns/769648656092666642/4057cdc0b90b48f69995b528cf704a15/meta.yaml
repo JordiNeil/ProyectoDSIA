@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/769648656092666642/4057cdc0b90b48f69995b528cf704a15/artifacts
+end_time: 1740851265426
+entry_point_name: ''
+experiment_id: '769648656092666642'
+lifecycle_stage: active
+run_id: 4057cdc0b90b48f69995b528cf704a15
+run_name: mercurial-robin-356
+run_uuid: 4057cdc0b90b48f69995b528cf704a15
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740851080996
+status: 3
+tags: []
+user_id: vic_p
