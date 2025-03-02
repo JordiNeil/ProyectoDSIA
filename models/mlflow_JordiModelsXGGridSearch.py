@@ -107,7 +107,7 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 
 # Train and log with MLflow
 
-mlflow.set_experiment("dsia/salesPrice/JordiModelsXGGridSearchCV")
+mlflow.set_experiment("dsia/salesPrice")
 
 with mlflow.start_run(run_name="xgboost-GridSearchCV"):
     mlflow.sklearn.autolog(log_models=True, log_input_examples=True, log_model_signatures=True)

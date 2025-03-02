@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/11e29e86e57e456c8e9bcbc733939f52/artifacts
+end_time: 1740878419919
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 11e29e86e57e456c8e9bcbc733939f52
+run_name: xgboost-GridSearchCV
+run_uuid: 11e29e86e57e456c8e9bcbc733939f52
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740878294616
+status: 3
+tags: []
+user_id: vic_p

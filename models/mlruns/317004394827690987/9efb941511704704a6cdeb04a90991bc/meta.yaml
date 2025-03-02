@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/9efb941511704704a6cdeb04a90991bc/artifacts
+end_time: 1740878413189
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 9efb941511704704a6cdeb04a90991bc
+run_name: placid-kit-787
+run_uuid: 9efb941511704704a6cdeb04a90991bc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740878294616
+status: 3
+tags: []
+user_id: vic_p

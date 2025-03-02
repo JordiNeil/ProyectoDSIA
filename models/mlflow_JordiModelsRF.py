@@ -89,8 +89,8 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 # print(os.getcwd())
 
 # Train and log with MLflow
-run_name = "random-forest-complete"
-mlflow.set_experiment("dsia/salesPrice/JordiModelsRF")
+run_name = "random-forest-1"
+mlflow.set_experiment("dsia/salesPrice")
 with mlflow.start_run(run_name=run_name):
     # Train the model
     rf_model = RandomForestRegressor(n_estimators=100, random_state=42)

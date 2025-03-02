@@ -1,6 +1,6 @@
-artifact_location: file:///c:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/0
-creation_time: 1740846316882
+artifact_location: mlflow-artifacts:/0
+creation_time: 1740877939524
 experiment_id: '0'
-last_update_time: 1740846316882
+last_update_time: 1740877939524
 lifecycle_stage: active
 name: Default
