@@ -78,72 +78,197 @@ app = dash.Dash(__name__)
 
 # Definir estilos
 COLORS = {
-    'background': '#f8f9fa',
+    'background': '#ffffff',
+    'secondary-bg': '#f8f9fa',
     'text': '#2c3e50',
     'accent': '#3498db',
-    'light-accent': '#ebf5fb',
-    'border': '#e9ecef'
+    'accent-dark': '#2980b9',
+    'light-accent': '#e3f2fd',
+    'border': '#e9ecef',
+    'success': '#2ecc71',
+    'card-shadow': '0px 4px 12px rgba(0, 0, 0, 0.1)'
+}
+
+# Estilos comunes
+card_style = {
+    'backgroundColor': COLORS['background'],
+    'borderRadius': '8px',
+    'padding': '20px',
+    'marginBottom': '20px',
+    'boxShadow': COLORS['card-shadow'],
+    'border': f'1px solid {COLORS["border"]}'
+}
+
+title_style = {
+    'color': COLORS['text'],
+    'marginBottom': '20px',
+    'fontWeight': 'bold',
+    'textAlign': 'center'
 }
 
 # Layout de la aplicación
 app.layout = html.Div([
+    # Header
     html.Div([
-        html.H1("Análisis de Precios de Viviendas", style={'textAlign': 'center', 'color': COLORS['text']})
-    ], style={'backgroundColor': COLORS['light-accent'], 'padding': '20px'}),
-
-    # Sección de visualización de métricas
+        html.H1("Análisis de Precios de Viviendas", 
+                style={'textAlign': 'center', 'color': 'white', 'fontWeight': 'bold', 'marginBottom': '0'})
+    ], style={'backgroundColor': COLORS['accent-dark'], 'padding': '30px 20px', 'borderRadius': '0 0 10px 10px', 'boxShadow': COLORS['card-shadow']}),
+    
+    # Contenedor principal
     html.Div([
-        html.H3("Métricas del Modelo", style={'textAlign': 'center', 'color': COLORS['text']}),
-        html.P(f"RMSE: ${rmse:,.2f}", style={'textAlign': 'center'}),
-        html.P(f"R2 Score: {r2:.4f}", style={'textAlign': 'center'}),
-    ], style={'padding': '20px', 'backgroundColor': COLORS['background']}),
-
-    # Gráfico de Importancia de Características
-    html.Div([
-        html.H3("Top 10 Características Más Importantes", style={'textAlign': 'center', 'color': COLORS['text']}),
-        dcc.Graph(
-            figure=px.bar(feature_importance, x='importance', y='feature', orientation='h',
-                          title="Top 10 Most Important Features")
-        )
-    ], style={'padding': '20px', 'backgroundColor': COLORS['background']}),
-
-    # Gráfico de Predicción vs Real
-    html.Div([
-        html.H3("Actual vs Predicted Sale Prices", style={'textAlign': 'center', 'color': COLORS['text']}),
-        dcc.Graph(
-            figure=px.scatter(x=y_test, y=y_pred,
-                              labels={'x': 'Actual Sale Price', 'y': 'Predicted Sale Price'},
-                              title="Actual vs Predicted Sale Prices")
-        )
-    ], style={'padding': '20px', 'backgroundColor': COLORS['background']}),
-
-    # Sección de Predicción Interactiva
-    html.Div([
-        html.H3("Predicción Interactiva", style={'textAlign': 'center', 'color': COLORS['text']}),
-
-        # Dropdowns y sliders para input
+        # Fila superior - Métricas y Características importantes
         html.Div([
-            html.Label("Garage Cars"),
-            dcc.Slider(min=0, max=5, step=1, value=2, id='garage-cars-slider'),
-
-            html.Label("Overall Quality"),
-            dcc.Slider(min=1, max=10, step=1, value=5, id='overall-quality-slider'),
-
-            html.Label("GrLivArea (Above Ground Living Area)"),
-            dcc.Input(type='number', value=1500, id='grlivarea-input'),
-
-            html.Label("TotalBsmtSF (Total Basement SF)"),
-            dcc.Input(type='number', value=1000, id='totalbsmt-input'),
-
-            html.Label("Lot Area"),
-            dcc.Input(type='number', value=8000, id='lotarea-input')
-        ], style={'padding': '20px', 'display': 'grid', 'grid-template-columns': 'repeat(2, 1fr)', 'gap': '20px'}),
-
-        # Output de Predicción
-        html.H3("Precio Predicho:", style={'textAlign': 'center', 'color': COLORS['text']}),
-        html.Div(id='predicted-price', style={'textAlign': 'center', 'fontSize': '2em', 'color': COLORS['accent']})
-    ], style={'padding': '20px', 'backgroundColor': COLORS['background']})
-])
+            # Tarjeta de métricas
+            html.Div([
+                html.H3("Métricas del Modelo", style=title_style),
+                html.Div([
+                    html.Div([
+                        html.H4("RMSE", style={'color': COLORS['text'], 'marginBottom': '5px', 'textAlign': 'center'}),
+                        html.P(f"${rmse:,.2f}", style={'textAlign': 'center', 'fontSize': '1.5em', 'fontWeight': 'bold', 'color': COLORS['accent-dark']}),
+                    ], style={'flex': '1', 'padding': '10px', 'backgroundColor': COLORS['light-accent'], 'borderRadius': '5px'}),
+                    
+                    html.Div([
+                        html.H4("R² Score", style={'color': COLORS['text'], 'marginBottom': '5px', 'textAlign': 'center'}),
+                        html.P(f"{r2:.4f}", style={'textAlign': 'center', 'fontSize': '1.5em', 'fontWeight': 'bold', 'color': COLORS['accent-dark']}),
+                    ], style={'flex': '1', 'padding': '10px', 'backgroundColor': COLORS['light-accent'], 'borderRadius': '5px'}),
+                ], style={'display': 'flex', 'gap': '20px'})
+            ], style={**card_style, 'flex': '1'}),
+            
+            # Gráfico de Importancia de Características
+            html.Div([
+                html.H3("Top 10 Características Más Importantes", style=title_style),
+                dcc.Graph(
+                    figure=px.bar(
+                        feature_importance, 
+                        x='importance', 
+                        y='feature', 
+                        orientation='h',
+                        color='importance',
+                        color_continuous_scale=['#74b9ff', '#0984e3', '#2980b9'],
+                        labels={'importance': 'Importancia', 'feature': 'Característica'}
+                    ).update_layout(
+                        plot_bgcolor=COLORS['background'],
+                        paper_bgcolor=COLORS['background'],
+                        margin=dict(l=10, r=10, t=10, b=10),
+                        coloraxis_showscale=False
+                    )
+                )
+            ], style={**card_style, 'flex': '2'})
+        ], style={'display': 'flex', 'gap': '20px', 'marginBottom': '20px'}),
+        
+        # Fila media - Gráfico de Predicción vs Real
+        html.Div([
+            html.H3("Precios Reales vs. Predichos", style=title_style),
+            dcc.Graph(
+                figure=px.scatter(
+                    x=y_test, 
+                    y=y_pred,
+                    labels={'x': 'Precio Real ($)', 'y': 'Precio Predicho ($)'},
+                    opacity=0.7
+                ).update_layout(
+                    plot_bgcolor=COLORS['background'],
+                    paper_bgcolor=COLORS['background'],
+                    margin=dict(l=10, r=10, t=10, b=10)
+                ).add_shape(
+                    type="line", line=dict(dash="dash", color=COLORS['accent']),
+                    x0=y_test.min(), y0=y_test.min(),
+                    x1=y_test.max(), y1=y_test.max()
+                )
+            )
+        ], style=card_style),
+        
+        # Sección de Predicción Interactiva
+        html.Div([
+            html.H3("Predicción Interactiva", style=title_style),
+            
+            # Contenedor para inputs y resultado
+            html.Div([
+                # Columna de inputs
+                html.Div([
+                    # Garage Cars
+                    html.Div([
+                        html.Label("Garage Cars", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                        dcc.Slider(
+                            min=0, max=5, step=1, value=2, id='garage-cars-slider',
+                            marks={i: str(i) for i in range(6)},
+                            className='custom-slider'
+                        ),
+                    ], style={'marginBottom': '20px'}),
+                    
+                    # Overall Quality
+                    html.Div([
+                        html.Label("Overall Quality", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                        dcc.Slider(
+                            min=1, max=10, step=1, value=5, id='overall-quality-slider',
+                            marks={i: str(i) for i in range(1, 11)},
+                            className='custom-slider'
+                        ),
+                    ], style={'marginBottom': '20px'}),
+                    
+                    # GrLivArea
+                    html.Div([
+                        html.Label("GrLivArea (Above Ground Living Area)", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                        dcc.Input(
+                            type='number', value=1500, id='grlivarea-input',
+                            style={'width': '100%', 'padding': '8px', 'borderRadius': '4px', 'border': f'1px solid {COLORS["border"]}'}
+                        ),
+                    ], style={'marginBottom': '20px'}),
+                    
+                    # TotalBsmtSF
+                    html.Div([
+                        html.Label("TotalBsmtSF (Total Basement SF)", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                        dcc.Input(
+                            type='number', value=1000, id='totalbsmt-input',
+                            style={'width': '100%', 'padding': '8px', 'borderRadius': '4px', 'border': f'1px solid {COLORS["border"]}'}
+                        ),
+                    ], style={'marginBottom': '20px'}),
+                    
+                    # Lot Area
+                    html.Div([
+                        html.Label("Lot Area", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                        dcc.Input(
+                            type='number', value=8000, id='lotarea-input',
+                            style={'width': '100%', 'padding': '8px', 'borderRadius': '4px', 'border': f'1px solid {COLORS["border"]}'}
+                        ),
+                    ]),
+                ], style={'flex': '3', 'padding': '10px'}),
+                
+                # Columna de resultado
+                html.Div([
+                    html.Div([
+                        html.H3("Precio Predicho", style={'textAlign': 'center', 'color': COLORS['text'], 'marginBottom': '20px'}),
+                        html.Div(
+                            id='predicted-price', 
+                            style={
+                                'textAlign': 'center', 
+                                'fontSize': '2.5em', 
+                                'fontWeight': 'bold',
+                                'color': COLORS['success'],
+                                'padding': '30px 0'
+                            }
+                        ),
+                        html.P("Basado en las características seleccionadas", style={'textAlign': 'center', 'color': COLORS['text'], 'opacity': '0.7'})
+                    ], style={
+                        'backgroundColor': COLORS['light-accent'], 
+                        'padding': '20px', 
+                        'borderRadius': '8px',
+                        'height': '100%',
+                        'display': 'flex',
+                        'flexDirection': 'column',
+                        'justifyContent': 'center'
+                    })
+                ], style={'flex': '2', 'padding': '10px'})
+            ], style={'display': 'flex'})
+        ], style=card_style),
+        
+        # Footer
+        html.Div([
+            html.P("Dashboard de Análisis de Precios de Viviendas | Desarrollado con Dash y XGBoost", 
+                   style={'textAlign': 'center', 'color': COLORS['text'], 'opacity': '0.7'})
+        ], style={'marginTop': '20px'})
+        
+    ], style={'maxWidth': '1200px', 'margin': '20px auto', 'padding': '0 20px'})
+], style={'backgroundColor': COLORS['secondary-bg'], 'minHeight': '100vh', 'fontFamily': 'Arial, sans-serif'})
 
 
 # Callback para actualizar la predicción basada en los inputs
