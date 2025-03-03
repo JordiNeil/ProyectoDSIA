@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/c23ffdce305e4fc680db4fc4098753ec/artifacts
+end_time: 1740960721646
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: c23ffdce305e4fc680db4fc4098753ec
+run_name: mlp-GridSearchCV
+run_uuid: c23ffdce305e4fc680db4fc4098753ec
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740960662033
+status: 3
+tags: []
+user_id: vic_p
