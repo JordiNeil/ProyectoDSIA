@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/f2c34dfc03f644bab3120895ceee6ded/artifacts
+end_time: 1740959839517
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: f2c34dfc03f644bab3120895ceee6ded
+run_name: righteous-bug-487
+run_uuid: f2c34dfc03f644bab3120895ceee6ded
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740959761231
+status: 3
+tags: []
+user_id: vic_p
