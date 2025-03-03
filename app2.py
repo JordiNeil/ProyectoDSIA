@@ -317,7 +317,7 @@ app.layout = html.Div([
             
             # Contenedor para inputs y resultado
             html.Div([
-                # Columna de inputs
+                # Input column
                 html.Div([
                     # Primera fila de inputs
                     html.Div([
@@ -374,34 +374,39 @@ app.layout = html.Div([
                             ),
                         ], style={'flex': '1'}),
                     ], style={'display': 'flex', 'gap': '20px'}),
-                ], style={'flex': '3', 'padding': '10px'}),
+                ], style={'flex': '3', 'padding': '10px', 'minWidth': '0'}),
                 
-                # Columna de resultado
+                # Result column
                 html.Div([
                     html.Div([
-                        html.H3("Precio Predicho", style={'textAlign': 'center', 'color': COLORS['text'], 'marginBottom': '20px'}),
+                        html.H3("Precio Predicho", style={'textAlign': 'center', 'color': COLORS['text'], 'marginBottom': '15px'}),
                         html.Div(
                             id='predicted-price', 
                             style={
                                 'textAlign': 'center', 
-                                'fontSize': '2.5em', 
+                                'fontSize': '2em',
                                 'fontWeight': 'bold',
                                 'color': COLORS['success'],
-                                'padding': '30px 0'
+                                'padding': '10px 5px',
+                                'wordBreak': 'break-word',
+                                'overflowWrap': 'break-word',
+                                'maxWidth': '100%'
                             }
                         ),
                         html.P("Basado en las características seleccionadas", style={'textAlign': 'center', 'color': COLORS['text'], 'opacity': '0.7'})
                     ], style={
                         'backgroundColor': COLORS['light-accent'], 
-                        'padding': '20px', 
+                        'padding': '15px',
                         'borderRadius': '8px',
-                        'height': '100%',
                         'display': 'flex',
                         'flexDirection': 'column',
-                        'justifyContent': 'center'
+                        'justifyContent': 'center',
+                        'overflow': 'hidden',
+                        'boxSizing': 'border-box',
+                        'width': '100%'
                     })
-                ], style={'flex': '2', 'padding': '10px'})
-            ], style={'display': 'flex'})
+                ], style={'flex': '2', 'padding': '10px', 'minWidth': '0', 'maxWidth': '100%'})
+            ], style={'display': 'flex', 'flexWrap': 'wrap'})
         ], style={**card_style, 'marginBottom': '15px'}),
         
         # Información adicional
