@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/010c8fe1466049a99aa4c29fcbbc1ee7/artifacts
+end_time: 1740966193491
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 010c8fe1466049a99aa4c29fcbbc1ee7
+run_name: angry-steed-152
+run_uuid: 010c8fe1466049a99aa4c29fcbbc1ee7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740965527027
+status: 3
+tags: []
+user_id: vic_p

@@ -1,0 +1,1 @@
+[('ridge', Ridge()), ('lasso', Lasso(alpha=0.1)), ('gbr', GradientBoostingRegressor(random_state=42))]
