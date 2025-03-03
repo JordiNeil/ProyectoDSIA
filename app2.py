@@ -18,7 +18,7 @@ file_path = "data/train.csv"
 df = pd.read_csv(file_path)
 
 # Seleccionar columnas numéricas y categóricas relevantes
-selected_num_columns = ['LotFrontage', 'LotArea', 'TotalBsmtSF', 'GrLivArea', 'SalePrice']
+selected_num_columns = ['LotFrontage', 'LotArea', 'TotalBsmtSF', 'GrLivArea', 'YearBuilt', 'SalePrice']
 categorical_columns_filtered = [
     'Street', 'LandContour', 'LandSlope', 'Utilities', 'Neighborhood', 'Condition1',
     'Condition2', 'HouseStyle', 'BldgType', 'OverallQual', 'OverallCond', 'RoofStyle',
@@ -90,6 +90,12 @@ avg_price_by_neighborhood = df.groupby('Neighborhood')['SalePrice'].mean().sort_
 
 # Correlación entre variables numéricas y precio
 corr_with_price = df[selected_num_columns].corr()['SalePrice'].sort_values(ascending=False).drop('SalePrice')
+
+# Variables más correlacionadas con el precio
+# Check which features are available in the dataset
+available_corr_features = ["SalePrice", "OverallQual", "GrLivArea", "GarageCars", "TotalBsmtSF"]
+# Remove YearBuilt since it's not in the filtered dataset
+corr_df = df[available_corr_features].corr()
 
 # Crear la aplicación Dash
 app = dash.Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}])
@@ -320,6 +326,56 @@ app.layout = html.Div([
             ], style={'flex': '1', 'display': 'flex', 'flexDirection': 'column', 'gap': '15px'}),
         ], style={'display': 'flex', 'gap': '15px', 'marginBottom': '15px'}),
         
+        # Nueva fila para visualizaciones adicionales
+        html.Div([
+            # Columna izquierda - Mapa de calor de correlaciones
+            html.Div([
+                html.Div([
+                    html.H3("Correlación entre Variables Clave", style=title_style),
+                    dcc.Graph(
+                        figure=px.imshow(
+                            corr_df, 
+                            text_auto=True,
+                            color_continuous_scale=['#74b9ff', '#0984e3', '#2980b9'],
+                            labels={'color': 'Correlación'}
+                        ).update_layout(
+                            plot_bgcolor=COLORS['background'],
+                            paper_bgcolor=COLORS['background'],
+                            margin=dict(l=10, r=10, t=10, b=10),
+                            height=300,
+                            coloraxis_showscale=True
+                        )
+                    )
+                ], style=card_style)
+            ], style={'flex': '1', 'display': 'flex', 'flexDirection': 'column'}),
+            
+            # Columna derecha - Scatter plot interactivo
+            html.Div([
+                html.Div([
+                    html.H3("Relación de Variables con Precio", style=title_style),
+                    html.Div([
+                        dcc.Dropdown(
+                            id='scatter-variable',
+                            options=[
+                                {"label": "Calidad General", "value": "OverallQual"},
+                                {"label": "Área Habitable", "value": "GrLivArea"},
+                                {"label": "Garaje (Capacidad Autos)", "value": "GarageCars"},
+                                {"label": "Año de Construcción", "value": "YearBuilt"},
+                            ],
+                            value="OverallQual",
+                            clearable=False,
+                            style={
+                                'width': '100%',
+                                'marginBottom': '15px',
+                                'backgroundColor': COLORS['background']
+                            }
+                        ),
+                    ]),
+                    dcc.Graph(id='scatter-plot')
+                ], style=card_style)
+            ], style={'flex': '1', 'display': 'flex', 'flexDirection': 'column'}),
+        ], style={'display': 'flex', 'gap': '15px', 'marginBottom': '15px'}),
+        
         # Sección de Predicción Interactiva
         html.Div([
             html.H3("Predicción Interactiva", style={**title_style, 'fontSize': '1.4rem', 'marginBottom': '20px'}),
@@ -474,6 +530,28 @@ def predict_price(garage_cars, overall_quality, grlivarea, totalbsmt, lotarea):
     predicted_price = model.predict(input_scaled)[0]
     return f"${predicted_price:,.2f}"
 
+# Add this callback for the interactive scatter plot
+@app.callback(
+    Output('scatter-plot', 'figure'),
+    [Input('scatter-variable', 'value')]
+)
+def update_scatter(selected_var):
+    fig = px.scatter(
+        df, 
+        x=selected_var, 
+        y="SalePrice",
+        opacity=0.7,
+        color_discrete_sequence=[COLORS['accent']]
+    )
+    fig.update_layout(
+        plot_bgcolor=COLORS['background'],
+        paper_bgcolor=COLORS['background'],
+        margin=dict(l=10, r=10, t=10, b=10),
+        height=250,
+        xaxis=dict(title=selected_var),
+        yaxis=dict(title='Precio', tickprefix='$', tickformat=',')
+    )
+    return fig
 
 # Ejecutar la aplicación Dash
 if __name__ == '__main__':
