@@ -1,0 +1,24 @@
+digest: e970209c
+name: dataset
+profile: '{"num_rows": 1168, "num_elements": 28032}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "LotFrontage", "required":
+  false}, {"type": "long", "name": "LotArea", "required": true}, {"type": "long",
+  "name": "TotalBsmtSF", "required": true}, {"type": "long", "name": "GrLivArea",
+  "required": true}, {"type": "string", "name": "LandSlope", "required": true}, {"type":
+  "string", "name": "Neighborhood", "required": true}, {"type": "string", "name":
+  "Condition1", "required": true}, {"type": "string", "name": "HouseStyle", "required":
+  true}, {"type": "string", "name": "BldgType", "required": true}, {"type": "long",
+  "name": "OverallQual", "required": true}, {"type": "long", "name": "OverallCond",
+  "required": true}, {"type": "string", "name": "RoofStyle", "required": true}, {"type":
+  "string", "name": "Exterior1st", "required": true}, {"type": "string", "name": "ExterCond",
+  "required": true}, {"type": "string", "name": "BsmtCond", "required": false}, {"type":
+  "string", "name": "BsmtFinType1", "required": false}, {"type": "string", "name":
+  "KitchenQual", "required": true}, {"type": "long", "name": "TotRmsAbvGrd", "required":
+  true}, {"type": "string", "name": "GarageType", "required": false}, {"type": "string",
+  "name": "PavedDrive", "required": true}, {"type": "string", "name": "SaleType",
+  "required": true}, {"type": "string", "name": "SaleCondition", "required": true},
+  {"type": "long", "name": "Fireplaces", "required": true}, {"type": "long", "name":
+  "GarageCars", "required": true}]}'
+source: '{"tags": {"mlflow.user": "vic_p", "mlflow.source.name": ".\\mlflow_MaryiModelGBModel.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "8fa298a638cfcea840553e9c153dae0297c4a730"}}'
+source_type: code

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/4f33e0d753764253945be46bc3c9f241/artifacts
+end_time: 1740964877641
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 4f33e0d753764253945be46bc3c9f241
+run_name: loud-zebra-337
+run_uuid: 4f33e0d753764253945be46bc3c9f241
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740964731950
+status: 3
+tags: []
+user_id: vic_p

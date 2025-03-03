@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/14f770aecec141489fed788ad6165dac/artifacts
+end_time: 1740878267653
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 14f770aecec141489fed788ad6165dac
+run_name: lyrical-stork-563
+run_uuid: 14f770aecec141489fed788ad6165dac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740878063093
+status: 3
+tags: []
+user_id: vic_p

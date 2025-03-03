@@ -1,0 +1,1 @@
+{'stacking__ridge__alpha': [0.01, 0.1, 1.0, 10.0], 'stacking__lasso__alpha': [0.001, 0.01, 0.1, 1.0], 'stacking__gbr__n_estimators': [100, 200, 300], 'stacking__final_estimator__fit_intercept': [True, False]}
