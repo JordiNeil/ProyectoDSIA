@@ -214,14 +214,14 @@ app.layout = html.Div([
         html.Div([
             # Columna izquierda
             html.Div([
-                # Gráfico de Importancia de Características
+                # Gráfico de importancia de características
                 html.Div([
-                    html.H3("Top 10 Características Más Importantes", style=title_style),
+                    html.H3("Importancia de Características", style=title_style),
                     dcc.Graph(
                         figure=px.bar(
                             feature_importance, 
                             x='importance', 
-                            y='feature', 
+                            y='feature',
                             orientation='h',
                             color='importance',
                             color_continuous_scale=['#74b9ff', '#0984e3', '#2980b9'],
@@ -230,30 +230,32 @@ app.layout = html.Div([
                             plot_bgcolor=COLORS['background'],
                             paper_bgcolor=COLORS['background'],
                             margin=dict(l=10, r=10, t=10, b=10),
-                            height=350,
-                            coloraxis_showscale=False
+                            height=300,
+                            coloraxis_showscale=False,
+                            yaxis=dict(autorange="reversed")
                         )
                     )
                 ], style=card_style),
                 
-                # Gráfico de Precio por Calidad
+                # Gráfico de precio por calidad
                 html.Div([
-                    html.H3("Precio Promedio por Calidad", style=title_style),
+                    html.H3("Precio por Calidad General", style=title_style),
                     dcc.Graph(
                         figure=px.bar(
-                            avg_price_by_quality,
-                            x='OverallQual',
+                            avg_price_by_quality, 
+                            x='OverallQual', 
                             y='SalePrice',
-                            labels={'OverallQual': 'Calidad General (1-10)', 'SalePrice': 'Precio Promedio ($)'},
                             color='SalePrice',
                             color_continuous_scale=['#74b9ff', '#0984e3', '#2980b9'],
+                            labels={'OverallQual': 'Calidad General', 'SalePrice': 'Precio Promedio'}
                         ).update_layout(
                             plot_bgcolor=COLORS['background'],
                             paper_bgcolor=COLORS['background'],
                             margin=dict(l=10, r=10, t=10, b=10),
-                            height=350,
+                            height=300,
                             coloraxis_showscale=False,
-                            yaxis=dict(tickprefix='$', tickformat=',')
+                            yaxis=dict(title='Precio Promedio', tickprefix='$', tickformat=','),
+                            xaxis=dict(title='Calidad General (1-10)')
                         )
                     )
                 ], style=card_style),
@@ -261,50 +263,57 @@ app.layout = html.Div([
             
             # Columna derecha
             html.Div([
-                # Gráfico de Predicción vs Real
+                # Gráfico de precio real vs predicho
                 html.Div([
-                    html.H3("Precios Reales vs. Predichos", style=title_style),
+                    html.H3("Precio Real vs Predicho", style=title_style),
                     dcc.Graph(
                         figure=px.scatter(
                             x=y_test, 
                             y=y_pred,
-                            labels={'x': 'Precio Real ($)', 'y': 'Precio Predicho ($)'},
+                            labels={'x': 'Precio Real', 'y': 'Precio Predicho'},
                             opacity=0.7,
-                            color_discrete_sequence=[COLORS['accent']]
+                            color_discrete_sequence=['#3498db']
                         ).update_layout(
                             plot_bgcolor=COLORS['background'],
                             paper_bgcolor=COLORS['background'],
                             margin=dict(l=10, r=10, t=10, b=10),
-                            height=350,
-                            xaxis=dict(tickprefix='$', tickformat=','),
-                            yaxis=dict(tickprefix='$', tickformat=',')
+                            height=300,
+                            xaxis=dict(title='Precio Real', tickprefix='$', tickformat=','),
+                            yaxis=dict(title='Precio Predicho', tickprefix='$', tickformat=',')
                         ).add_shape(
-                            type="line", line=dict(dash="dash", color=COLORS['accent-dark']),
-                            x0=y_test.min(), y0=y_test.min(),
-                            x1=y_test.max(), y1=y_test.max()
+                            type="line",
+                            x0=y_test.min(),
+                            y0=y_test.min(),
+                            x1=y_test.max(),
+                            y1=y_test.max(),
+                            line=dict(
+                                color="#e74c3c",  # Changed to a bright red color
+                                width=3,          # Increased line width
+                                dash="solid"      # Changed from dotted to solid
+                            )
                         )
                     )
                 ], style=card_style),
                 
-                # Gráfico de Precio por Vecindario
+                # Gráfico de precio por vecindario
                 html.Div([
-                    html.H3("Top 10 Vecindarios por Precio Promedio", style=title_style),
+                    html.H3("Precio Promedio por Vecindario (Top 10)", style=title_style),
                     dcc.Graph(
                         figure=px.bar(
-                            avg_price_by_neighborhood,
-                            x='Neighborhood',
+                            avg_price_by_neighborhood, 
+                            x='Neighborhood', 
                             y='SalePrice',
-                            labels={'Neighborhood': 'Vecindario', 'SalePrice': 'Precio Promedio ($)'},
                             color='SalePrice',
                             color_continuous_scale=['#74b9ff', '#0984e3', '#2980b9'],
+                            labels={'Neighborhood': 'Vecindario', 'SalePrice': 'Precio Promedio'}
                         ).update_layout(
                             plot_bgcolor=COLORS['background'],
                             paper_bgcolor=COLORS['background'],
                             margin=dict(l=10, r=10, t=10, b=10),
-                            height=350,
+                            height=300,
                             coloraxis_showscale=False,
-                            yaxis=dict(tickprefix='$', tickformat=','),
-                            xaxis={'categoryorder':'total descending'}
+                            yaxis=dict(title='Precio Promedio', tickprefix='$', tickformat=','),
+                            xaxis=dict(title='Vecindario', tickangle=45)
                         )
                     )
                 ], style=card_style),
