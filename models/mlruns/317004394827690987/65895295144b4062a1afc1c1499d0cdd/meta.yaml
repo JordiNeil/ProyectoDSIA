@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/vic_p/OneDrive/Documents/Maestria/DSIA/proyectos/ProyectoDSIA/models/mlruns/317004394827690987/65895295144b4062a1afc1c1499d0cdd/artifacts
+end_time: 1740964877641
+entry_point_name: ''
+experiment_id: '317004394827690987'
+lifecycle_stage: active
+run_id: 65895295144b4062a1afc1c1499d0cdd
+run_name: luminous-bear-367
+run_uuid: 65895295144b4062a1afc1c1499d0cdd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740964731950
+status: 3
+tags: []
+user_id: vic_p

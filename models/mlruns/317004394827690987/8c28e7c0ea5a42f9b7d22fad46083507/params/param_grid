@@ -1,0 +1,1 @@
+{'gbr__n_estimators': [100, 200, 300], 'gbr__learning_rate': [0.01, 0.05, 0.1], 'gbr__max_depth': [3, 5, 7]}

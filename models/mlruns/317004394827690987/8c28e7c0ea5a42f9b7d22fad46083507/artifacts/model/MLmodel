@@ -1,0 +1,48 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.9.13
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.20.3
+model_size_bytes: 421231
+model_uuid: 2c274f4b1d8347e3b8cedb83b072b221
+run_id: 8c28e7c0ea5a42f9b7d22fad46083507
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "LotFrontage", "required": true}, {"type":
+    "long", "name": "LotArea", "required": true}, {"type": "long", "name": "TotalBsmtSF",
+    "required": true}, {"type": "long", "name": "GrLivArea", "required": true}, {"type":
+    "string", "name": "LandSlope", "required": true}, {"type": "string", "name": "Neighborhood",
+    "required": true}, {"type": "string", "name": "Condition1", "required": true},
+    {"type": "string", "name": "HouseStyle", "required": true}, {"type": "string",
+    "name": "BldgType", "required": true}, {"type": "long", "name": "OverallQual",
+    "required": true}, {"type": "long", "name": "OverallCond", "required": true},
+    {"type": "string", "name": "RoofStyle", "required": true}, {"type": "string",
+    "name": "Exterior1st", "required": true}, {"type": "string", "name": "ExterCond",
+    "required": true}, {"type": "string", "name": "BsmtCond", "required": true}, {"type":
+    "string", "name": "BsmtFinType1", "required": true}, {"type": "string", "name":
+    "KitchenQual", "required": true}, {"type": "long", "name": "TotRmsAbvGrd", "required":
+    true}, {"type": "string", "name": "GarageType", "required": false}, {"type": "string",
+    "name": "PavedDrive", "required": true}, {"type": "string", "name": "SaleType",
+    "required": true}, {"type": "string", "name": "SaleCondition", "required": true},
+    {"type": "long", "name": "Fireplaces", "required": true}, {"type": "long", "name":
+    "GarageCars", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-03-03 01:20:23.296144'
