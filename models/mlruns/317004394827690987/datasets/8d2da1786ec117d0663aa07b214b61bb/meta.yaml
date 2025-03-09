@@ -1,0 +1,62 @@
+digest: bb2ad7d3
+name: dataset
+profile: '{"num_rows": 1168, "num_elements": 93440}'
+schema: '{"mlflow_colspec": [{"type": "long", "name": "Id", "required": true}, {"type":
+  "long", "name": "MSSubClass", "required": true}, {"type": "string", "name": "MSZoning",
+  "required": true}, {"type": "double", "name": "LotFrontage", "required": false},
+  {"type": "long", "name": "LotArea", "required": true}, {"type": "string", "name":
+  "Street", "required": true}, {"type": "string", "name": "Alley", "required": false},
+  {"type": "string", "name": "LotShape", "required": true}, {"type": "string", "name":
+  "LandContour", "required": true}, {"type": "string", "name": "Utilities", "required":
+  true}, {"type": "string", "name": "LotConfig", "required": true}, {"type": "string",
+  "name": "LandSlope", "required": true}, {"type": "string", "name": "Neighborhood",
+  "required": true}, {"type": "string", "name": "Condition1", "required": true}, {"type":
+  "string", "name": "Condition2", "required": true}, {"type": "string", "name": "BldgType",
+  "required": true}, {"type": "string", "name": "HouseStyle", "required": true}, {"type":
+  "long", "name": "OverallQual", "required": true}, {"type": "long", "name": "OverallCond",
+  "required": true}, {"type": "long", "name": "YearBuilt", "required": true}, {"type":
+  "long", "name": "YearRemodAdd", "required": true}, {"type": "string", "name": "RoofStyle",
+  "required": true}, {"type": "string", "name": "RoofMatl", "required": true}, {"type":
+  "string", "name": "Exterior1st", "required": true}, {"type": "string", "name": "Exterior2nd",
+  "required": true}, {"type": "string", "name": "MasVnrType", "required": false},
+  {"type": "double", "name": "MasVnrArea", "required": false}, {"type": "string",
+  "name": "ExterQual", "required": true}, {"type": "string", "name": "ExterCond",
+  "required": true}, {"type": "string", "name": "Foundation", "required": true}, {"type":
+  "string", "name": "BsmtQual", "required": false}, {"type": "string", "name": "BsmtCond",
+  "required": false}, {"type": "string", "name": "BsmtExposure", "required": false},
+  {"type": "string", "name": "BsmtFinType1", "required": false}, {"type": "long",
+  "name": "BsmtFinSF1", "required": true}, {"type": "string", "name": "BsmtFinType2",
+  "required": false}, {"type": "long", "name": "BsmtFinSF2", "required": true}, {"type":
+  "long", "name": "BsmtUnfSF", "required": true}, {"type": "long", "name": "TotalBsmtSF",
+  "required": true}, {"type": "string", "name": "Heating", "required": true}, {"type":
+  "string", "name": "HeatingQC", "required": true}, {"type": "string", "name": "CentralAir",
+  "required": true}, {"type": "string", "name": "Electrical", "required": false},
+  {"type": "long", "name": "1stFlrSF", "required": true}, {"type": "long", "name":
+  "2ndFlrSF", "required": true}, {"type": "long", "name": "LowQualFinSF", "required":
+  true}, {"type": "long", "name": "GrLivArea", "required": true}, {"type": "long",
+  "name": "BsmtFullBath", "required": true}, {"type": "long", "name": "BsmtHalfBath",
+  "required": true}, {"type": "long", "name": "FullBath", "required": true}, {"type":
+  "long", "name": "HalfBath", "required": true}, {"type": "long", "name": "BedroomAbvGr",
+  "required": true}, {"type": "long", "name": "KitchenAbvGr", "required": true}, {"type":
+  "string", "name": "KitchenQual", "required": true}, {"type": "long", "name": "TotRmsAbvGrd",
+  "required": true}, {"type": "string", "name": "Functional", "required": true}, {"type":
+  "long", "name": "Fireplaces", "required": true}, {"type": "string", "name": "FireplaceQu",
+  "required": false}, {"type": "string", "name": "GarageType", "required": false},
+  {"type": "double", "name": "GarageYrBlt", "required": false}, {"type": "string",
+  "name": "GarageFinish", "required": false}, {"type": "long", "name": "GarageCars",
+  "required": true}, {"type": "long", "name": "GarageArea", "required": true}, {"type":
+  "string", "name": "GarageQual", "required": false}, {"type": "string", "name": "GarageCond",
+  "required": false}, {"type": "string", "name": "PavedDrive", "required": true},
+  {"type": "long", "name": "WoodDeckSF", "required": true}, {"type": "long", "name":
+  "OpenPorchSF", "required": true}, {"type": "long", "name": "EnclosedPorch", "required":
+  true}, {"type": "long", "name": "3SsnPorch", "required": true}, {"type": "long",
+  "name": "ScreenPorch", "required": true}, {"type": "long", "name": "PoolArea", "required":
+  true}, {"type": "string", "name": "PoolQC", "required": false}, {"type": "string",
+  "name": "Fence", "required": false}, {"type": "string", "name": "MiscFeature", "required":
+  false}, {"type": "long", "name": "MiscVal", "required": true}, {"type": "long",
+  "name": "MoSold", "required": true}, {"type": "long", "name": "YrSold", "required":
+  true}, {"type": "string", "name": "SaleType", "required": true}, {"type": "string",
+  "name": "SaleCondition", "required": true}]}'
+source: '{"tags": {"mlflow.user": "vic_p", "mlflow.source.name": ".\\mlflow_BRModifiedLast.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "128daaab82edb823370c788c294155b929489faa"}}'
+source_type: code
