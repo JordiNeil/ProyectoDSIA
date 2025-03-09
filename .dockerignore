@@ -1,0 +1,17 @@
+.git
+.gitignore
+.dvc
+.dvcignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+EDA/
+README.md
+data.dvc
+app.py 
