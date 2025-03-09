@@ -83,40 +83,44 @@ mse = mean_squared_error(y_test_original, y_pred)
 rmse = np.sqrt(mse)
 r2 = r2_score(y_test_original, y_pred)
 
-# Obtener importancia de las características si está disponible
-# Check if we already have feature_importance from a previous run
+# Obtener importancia de las características
 if 'feature_importance' in globals():
     print("Using existing feature importance")
 else:
     print("Extracting feature importance...")
-    # Try to get feature importance from the model
     if hasattr(model, 'named_steps') and 'feature_selection' in model.named_steps and 'br' in model.named_steps:
-        # Get the feature selector and the model
+        # Obtener el selector y el modelo
         selector = model.named_steps['feature_selection']
         br_model = model.named_steps['br']
+        preprocessor = model.named_steps['preprocessor']
         
-        # Get the selected features
-        if hasattr(selector, 'get_support'):
-            # Get the selected feature indices
-            support = selector.get_support()
-            print(support, len(support))
-            print(len(br_model.coef_))
-            # print(X.columns, len(X.columns))
-            # # Get the feature names that were selected
-            # selected_features = model.feature_names_in_[support]
-            # print(selected_features, len(selected_features))
-            
-            # Get the coefficients
-            if hasattr(br_model, 'coef_') and len(br_model.coef_) == len(support):
-                feature_importance = pd.DataFrame({
-                    'feature': support,
-                    'importance': np.abs(br_model.coef_)
-                }).sort_values('importance', ascending=False).head(10)
-            else:
-                raise ValueError("Coefficient dimensions don't match selected features")
+        # Obtener features seleccionadas
+        support = selector.get_support()
+        
+        cat_ohe = preprocessor.named_transformers_['cat'].named_steps['onehot']
+        cat_feature_names = cat_ohe.get_feature_names_out(categorical_columns)
 
-        else:
-            raise ValueError("Feature selector doesn't have get_support method")
+        # Combine numeric and categorical feature names.
+        all_feature_names = numeric_columns + list(cat_feature_names)
+        print("All features:", len(all_feature_names))
+        selected_features = [name for name, selected in zip(all_feature_names, support) if selected]
+
+        print("Selected features:")
+        print(selected_features)
+        
+        
+        # Crear DataFrame con importancia
+        test_importance = pd.DataFrame({
+            'feature': selected_features,
+            'importance': np.abs(br_model.coef_)
+        }).sort_values('importance', ascending=False)
+        
+        print("Todas als caracteristicas seleccionadas:")
+        print(test_importance)
+
+        feature_importance = test_importance.head(10)
+        print("Top 10 características más importantes:")
+        print(feature_importance)
     else:
         raise ValueError("Model structure doesn't match expected pipeline")
 
