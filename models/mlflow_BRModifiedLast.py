@@ -73,18 +73,18 @@ X_train_trans = preprocessor.transform(X_train)
 selector = SelectFromModel(BayesianRidge(), threshold='median')
 selector.fit(X_train_trans, y_train)
 
-# Get the indices of the selected features.
-selected_indices = selector.get_support(indices=True)
+# # Get the indices of the selected features.
+# selected_indices = selector.get_support(indices=True)
 
-#Encoding categorical feature names and combining with numeric feature names
-cat_ohe = preprocessor.named_transformers_['cat'].named_steps['onehot']
-cat_feature_names = cat_ohe.get_feature_names_out(categorical_columns)
+# #Encoding categorical feature names and combining with numeric feature names
+# cat_ohe = preprocessor.named_transformers_['cat'].named_steps['onehot']
+# cat_feature_names = cat_ohe.get_feature_names_out(categorical_columns)
 
-# Combine numeric and categorical feature names.
-all_feature_names = numeric_columns + list(cat_feature_names)
-selected_feature_names = [all_feature_names[i] for i in selected_indices]
-print("Selected features:")
-print(selected_feature_names)
+# # Combine numeric and categorical feature names.
+# all_feature_names = numeric_columns + list(cat_feature_names)
+# selected_feature_names = [all_feature_names[i] for i in selected_indices]
+# print("Selected features:")
+# print(selected_feature_names)
 
 # --- New pipeline that includes feature selection ---
 new_pipeline = Pipeline(steps=[

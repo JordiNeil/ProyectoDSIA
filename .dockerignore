@@ -2,6 +2,7 @@
 .gitignore
 .dvc
 .dvcignore
+data.dvc
 .venv
 __pycache__
 *.pyc
@@ -13,5 +14,4 @@ venv/
 ENV/
 EDA/
 README.md
-data.dvc
 app.py 
