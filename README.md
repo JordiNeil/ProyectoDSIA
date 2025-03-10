@@ -11,106 +11,106 @@ Simon Aristizabal
 
 Maryi Alejandra Carvajal
 
-# House Price Prediction Dashboard
+# Panel de Predicción de Precios de Viviendas
 
-A Dash application for predicting house prices using machine learning models.
+Una aplicación Dash para predecir precios de viviendas utilizando modelos de aprendizaje automático.
 
-## Deployment on Railway
+## Despliegue en Railway
 
-This project is configured for deployment on Railway using Docker.
+Este proyecto está configurado para ser desplegado en Railway utilizando Docker.
 
-### Deployment Steps
+### Pasos para el Despliegue
 
-1. Push this repository to GitHub
-2. Connect your GitHub repository to Railway
-3. Set the required environment variables (see below)
-4. Railway will automatically detect the Dockerfile and deploy the application
+1. Sube este repositorio a GitHub
+2. Conecta tu repositorio de GitHub a Railway
+3. Configura las variables de entorno requeridas (ver abajo)
+4. Railway detectará automáticamente el Dockerfile y desplegará la aplicación
 
-### Environment Variables
+### Variables de Entorno
 
-The following environment variables are required for DVC to pull data from S3:
+Las siguientes variables de entorno son necesarias para que DVC extraiga datos de S3:
 
-- `AWS_ACCESS_KEY_ID`: Your AWS access key
-- `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
-- `AWS_SESSION_TOKEN`: Your AWS session token (required for temporary credentials)
-- `AWS_REGION`: (Optional) Your AWS region (e.g., us-east-1)
+- `AWS_ACCESS_KEY_ID`: Tu clave de acceso AWS
+- `AWS_SECRET_ACCESS_KEY`: Tu clave secreta AWS
+- `AWS_SESSION_TOKEN`: Tu token de sesión AWS (requerido para credenciales temporales)
+- `AWS_REGION`: (Opcional) Tu región AWS (ej., us-east-1)
 
-Additional optional environment variables:
+Variables de entorno opcionales adicionales:
 
-- `PORT`: The port on which the application will run (default: 8080)
+- `PORT`: El puerto en el que se ejecutará la aplicación (predeterminado: 8080)
 
-### Data Version Control (DVC)
+### Control de Versiones de Datos (DVC)
 
-This project uses DVC to access data files stored in an S3 bucket. The data will be automatically downloaded during container startup if the AWS credentials are provided.
+Este proyecto utiliza DVC para acceder a archivos de datos almacenados en un bucket S3. Los datos se descargarán automáticamente durante el inicio del contenedor si se proporcionan las credenciales AWS.
 
-#### How DVC Works in This Project
+#### Cómo Funciona DVC en Este Proyecto
 
-1. During container startup, the repository is cloned to a temporary directory
-2. AWS credentials are configured, including the session token if provided
-3. DVC pull is executed in the cloned repository
-4. If DVC pull fails, a direct S3 download is attempted as a fallback
-5. The data is copied from the cloned repository to the application directory
-6. The application uses the data from the `data/` directory
+1. Durante el inicio del contenedor, el repositorio se clona en un directorio temporal
+2. Se configuran las credenciales AWS, incluyendo el token de sesión si se proporciona
+3. Se ejecuta DVC pull en el repositorio clonado
+4. Si DVC pull falla, se intenta una descarga directa de S3 como alternativa
+5. Los datos se copian del repositorio clonado al directorio de la aplicación
+6. La aplicación utiliza los datos del directorio `data/`
 
-#### Troubleshooting DVC
+#### Solución de Problemas con DVC
 
-If you encounter issues with DVC data access:
+Si encuentras problemas con el acceso a datos de DVC:
 
-1. Verify your AWS credentials are correct
-2. Ensure you've provided the AWS session token if using temporary credentials
-3. Check that the S3 bucket `proyecto-dsia` exists and is accessible
-4. Ensure you have the necessary permissions to access the S3 bucket
-5. Verify that the repository contains the proper DVC configuration
+1. Verifica que tus credenciales AWS sean correctas
+2. Asegúrate de haber proporcionado el token de sesión AWS si estás usando credenciales temporales
+3. Comprueba que el bucket S3 `proyecto-dsia` exista y sea accesible
+4. Asegúrate de tener los permisos necesarios para acceder al bucket S3
+5. Verifica que el repositorio contenga la configuración DVC adecuada
 
-### Application Execution
+### Ejecución de la Aplicación
 
-The application is run directly with Python instead of using Gunicorn. The entrypoint script automatically configures the application to listen on the specified port and host (0.0.0.0).
+La aplicación se ejecuta directamente con Python en lugar de usar Gunicorn. El script de entrada configura automáticamente la aplicación para escuchar en el puerto especificado y host (0.0.0.0).
 
-### Local Development
+### Desarrollo Local
 
-To run the application locally:
+Para ejecutar la aplicación localmente:
 
-1. Clone the repository:
+1. Clona el repositorio:
    ```
    git clone https://github.com/JordiNeil/ProyectoDSIA.git
    cd ProyectoDSIA
    ```
 
-2. Install dependencies:
+2. Instala las dependencias:
    ```
    pip install -r requirements.txt
    ```
 
-3. Install DVC and pull the data:
+3. Instala DVC y extrae los datos:
    ```
    pip install dvc dvc[s3]
    
-   # Configure AWS credentials
-   export AWS_ACCESS_KEY_ID=your_access_key
-   export AWS_SECRET_ACCESS_KEY=your_secret_key
-   export AWS_SESSION_TOKEN=your_session_token  # If using temporary credentials
-   export AWS_REGION=your_region
+   # Configura las credenciales AWS
+   export AWS_ACCESS_KEY_ID=tu_clave_de_acceso
+   export AWS_SECRET_ACCESS_KEY=tu_clave_secreta
+   export AWS_SESSION_TOKEN=tu_token_de_sesion  # Si usas credenciales temporales
+   export AWS_REGION=tu_region
    
    dvc pull
    ```
 
-4. Run the application:
+4. Ejecuta la aplicación:
    ```
    python app2.py
    ```
 
 ### Docker
 
-To build and run the Docker container locally:
+Para construir y ejecutar el contenedor Docker localmente:
 
 ```bash
 docker build -t house-price-dashboard .
 docker run -p 8080:8080 \
-  -e AWS_ACCESS_KEY_ID=your_access_key \
-  -e AWS_SECRET_ACCESS_KEY=your_secret_key \
-  -e AWS_SESSION_TOKEN=your_session_token \
-  -e AWS_REGION=your_region \
+  -e AWS_ACCESS_KEY_ID=tu_clave_de_acceso \
+  -e AWS_SECRET_ACCESS_KEY=tu_clave_secreta \
+  -e AWS_SESSION_TOKEN=tu_token_de_sesion \
+  -e AWS_REGION=tu_region \
   house-price-dashboard
 ```
 
-Then access the application at http://localhost:8080
+Luego accede a la aplicación en http://localhost:8080
