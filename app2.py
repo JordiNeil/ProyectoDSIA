@@ -20,26 +20,7 @@ import os
 file_path = "data/train.csv"
 df = pd.read_csv(file_path)
 
-# # Seleccionar columnas numéricas y categóricas relevantes
-# numeric_columns = ['LotFrontage', 'LotArea', 'TotalBsmtSF', 'GrLivArea', 'YearBuilt', 'SalePrice']
-# categorical_columns_filtered = [
-#     'Street', 'LandContour', 'LandSlope', 'Utilities', 'Neighborhood', 'Condition1',
-#     'Condition2', 'HouseStyle', 'BldgType', 'OverallQual', 'OverallCond', 'RoofStyle',
-#     'Exterior1st', 'ExterCond', 'BsmtCond', 'BsmtFinType1', 'CentralAir', 'Heating',
-#     'KitchenQual', 'TotRmsAbvGrd', 'GarageType', 'GarageCond', 'PavedDrive',
-#     'SaleType', 'SaleCondition', 'Fireplaces', 'GarageCars'
-# ]
-
-# df = df[numeric_columns + categorical_columns_filtered]
-
-# # Manejo de valores nulos
-# df.fillna(df.mean(numeric_only=True), inplace=True)
-# for col in df.select_dtypes(include=['object']).columns:
-#     df[col].fillna(df[col].mode()[0], inplace=True)
-
-# # Convertir variables categóricas en dummies
 # df_encoded = pd.get_dummies(df, drop_first=True)
-
 numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
 
 # Identify categorical columns
@@ -469,12 +450,39 @@ app.layout = html.Div([
                             ),
                         ], style={'flex': '1'}),
                         
-                        # TotalBsmtSF
+                        # Neighborhood dropdown (replacing TotalBsmtSF)
                         html.Div([
-                            html.Label("TotalBsmtSF (Total Basement SF)", style={'fontWeight': 'bold', 'color': COLORS['text']}),
-                            dcc.Input(
-                                type='number', value=1000, id='totalbsmt-input',
-                                style={'width': '100%', 'padding': '8px', 'borderRadius': '4px', 'border': f'1px solid {COLORS["border"]}'}
+                            html.Label("Neighborhood", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                            dcc.Dropdown(
+                                id='neighborhood-dropdown',
+                                options=[
+                                    {'label': 'Blueste', 'value': 'Blueste'},
+                                    {'label': 'BrDale', 'value': 'BrDale'},
+                                    {'label': 'BrkSide', 'value': 'BrkSide'},
+                                    {'label': 'ClearCr', 'value': 'ClearCr'},
+                                    {'label': 'CollgCr', 'value': 'CollgCr'},
+                                    {'label': 'Crawfor', 'value': 'Crawfor'},
+                                    {'label': 'Edwards', 'value': 'Edwards'},
+                                    {'label': 'Gilbert', 'value': 'Gilbert'},
+                                    {'label': 'IDOTRR', 'value': 'IDOTRR'},
+                                    {'label': 'MeadowV', 'value': 'MeadowV'},
+                                    {'label': 'Mitchel', 'value': 'Mitchel'},
+                                    {'label': 'NAmes', 'value': 'NAmes'},
+                                    {'label': 'NPkVill', 'value': 'NPkVill'},
+                                    {'label': 'NWAmes', 'value': 'NWAmes'},
+                                    {'label': 'NoRidge', 'value': 'NoRidge'},
+                                    {'label': 'NridgHt', 'value': 'NridgHt'},
+                                    {'label': 'OldTown', 'value': 'OldTown'},
+                                    {'label': 'SWISU', 'value': 'SWISU'},
+                                    {'label': 'Sawyer', 'value': 'Sawyer'},
+                                    {'label': 'SawyerW', 'value': 'SawyerW'},
+                                    {'label': 'Somerst', 'value': 'Somerst'},
+                                    {'label': 'StoneBr', 'value': 'StoneBr'},
+                                    {'label': 'Timber', 'value': 'Timber'},
+                                    {'label': 'Veenker', 'value': 'Veenker'}
+                                ],
+                                value='NAmes',  # Default value
+                                style={'width': '100%', 'borderRadius': '4px'}
                             ),
                         ], style={'flex': '1'}),
                     ], style={'display': 'flex', 'gap': '20px', 'marginBottom': '20px'}),
@@ -565,10 +573,10 @@ app.layout = html.Div([
     [Input('garage-cars-slider', 'value'),
      Input('overall-quality-slider', 'value'),
      Input('grlivarea-input', 'value'),
-     Input('totalbsmt-input', 'value'),
+     Input('neighborhood-dropdown', 'value'),
      Input('lotarea-input', 'value')]
 )
-def predict_price(garage_cars, overall_quality, grlivarea, totalbsmt, lotarea):
+def predict_price(garage_cars, overall_quality, grlivarea, neighborhood, lotarea):
     # Create a dataframe with default values: median for numeric, mode for categorical
     input_data = pd.DataFrame(index=[0], columns=X.columns)
     
@@ -584,7 +592,7 @@ def predict_price(garage_cars, overall_quality, grlivarea, totalbsmt, lotarea):
     input_data['GarageCars'] = garage_cars
     input_data['OverallQual'] = overall_quality
     input_data['GrLivArea'] = grlivarea
-    input_data['TotalBsmtSF'] = totalbsmt
+    input_data['Neighborhood'] = neighborhood # Neighborhood
     input_data['LotArea'] = lotarea
     
     # Predict price using the model
