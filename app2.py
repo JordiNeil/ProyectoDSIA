@@ -4,7 +4,7 @@ from dash import dcc, html
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import xgboost as xgb
+from sklearn.linear_model import BayesianRidge
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.graph_objects as go
@@ -12,66 +12,98 @@ from dash.dependencies import Input, Output
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.feature_selection import SelectFromModel
+import pickle
+import os
 
 # Cargar los datos
 file_path = "data/train.csv"
 df = pd.read_csv(file_path)
 
-# Seleccionar columnas numéricas y categóricas relevantes
-selected_num_columns = ['LotFrontage', 'LotArea', 'TotalBsmtSF', 'GrLivArea', 'YearBuilt', 'SalePrice']
-categorical_columns_filtered = [
-    'Street', 'LandContour', 'LandSlope', 'Utilities', 'Neighborhood', 'Condition1',
-    'Condition2', 'HouseStyle', 'BldgType', 'OverallQual', 'OverallCond', 'RoofStyle',
-    'Exterior1st', 'ExterCond', 'BsmtCond', 'BsmtFinType1', 'CentralAir', 'Heating',
-    'KitchenQual', 'TotRmsAbvGrd', 'GarageType', 'GarageCond', 'PavedDrive',
-    'SaleType', 'SaleCondition', 'Fireplaces', 'GarageCars'
-]
+# df_encoded = pd.get_dummies(df, drop_first=True)
+numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
 
-df = df[selected_num_columns + categorical_columns_filtered]
-
-# Manejo de valores nulos
-df.fillna(df.mean(numeric_only=True), inplace=True)
-for col in df.select_dtypes(include=['object']).columns:
-    df[col].fillna(df[col].mode()[0], inplace=True)
-
-# Convertir variables categóricas en dummies
-df_encoded = pd.get_dummies(df, drop_first=True)
+# Identify categorical columns
+categorical_columns = df.select_dtypes(include=['object']).columns.tolist()
 
 # Separar features y target
-X = df_encoded.drop(['SalePrice'], axis=1)
-y = df_encoded['SalePrice']
+X = df.drop(['SalePrice'], axis=1)
+y = df['SalePrice']
 
-# Dividir y escalar datos
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+# Aplicar transformación logarítmica al precio de venta para evaluación
+y_log = np.log1p(y)
 
-# Entrenar modelo XGBoost con los mejores parámetros
-best_params = {
-    'colsample_bytree': 1.0,
-    'learning_rate': 0.1,
-    'max_depth': 3,
-    'min_child_weight': 3,
-    'n_estimators': 200,
-    'subsample': 1.0
-}
-model = xgb.XGBRegressor(**best_params, random_state=42)
-model.fit(X_train_scaled, y_train)
+# Dividir datos para evaluación
+X_train, X_test, y_train, y_test = train_test_split(X, y_log, test_size=0.2, random_state=42)
+
+# Cargar el modelo pre-entrenado
+model_path = os.path.join('saved_models', 'BR_regressor.pkl')
+try:
+    with open(model_path, 'rb') as f:
+        model = pickle.load(f)
+        
+    print("Model loaded successfully with the following components:")
+    if hasattr(model, 'named_steps'):
+        for step_name in model.named_steps:
+            print(f"- {step_name}: {type(model.named_steps[step_name]).__name__}")
+    
+except Exception as e:
+    print(f"Error loading model: {e}")
+
+# Obtener parámetros del modelo para visualización
+best_params = model['br'].get_params() if hasattr(model['br'], 'get_params') else {}
 
 # Obtener predicciones
-y_pred = model.predict(X_test_scaled)
+y_pred_log = model.predict(X_test)
+# Convertir de vuelta a la escala original
+y_pred = np.expm1(y_pred_log)
+y_test_original = np.expm1(y_test)
 
 # Evaluar modelo
-mse = mean_squared_error(y_test, y_pred)
+mse = mean_squared_error(y_test_original, y_pred)
 rmse = np.sqrt(mse)
-r2 = r2_score(y_test, y_pred)
+r2 = r2_score(y_test_original, y_pred)
 
 # Obtener importancia de las características
-feature_importance = pd.DataFrame({
-    'feature': X.columns,
-    'importance': model.feature_importances_
-}).sort_values('importance', ascending=False).head(10)
+if 'feature_importance' in globals():
+    print("Using existing feature importance")
+else:
+    print("Extracting feature importance...")
+    if hasattr(model, 'named_steps') and 'feature_selection' in model.named_steps and 'br' in model.named_steps:
+        # Obtener el selector y el modelo
+        selector = model.named_steps['feature_selection']
+        br_model = model.named_steps['br']
+        preprocessor = model.named_steps['preprocessor']
+        
+        # Obtener features seleccionadas
+        support = selector.get_support()
+        
+        cat_ohe = preprocessor.named_transformers_['cat'].named_steps['onehot']
+        cat_feature_names = cat_ohe.get_feature_names_out(categorical_columns)
+
+        # Combine numeric and categorical feature names.
+        all_feature_names = numeric_columns + list(cat_feature_names)
+        print("All features:", len(all_feature_names))
+        selected_features = [name for name, selected in zip(all_feature_names, support) if selected]
+
+        print("Selected features:")
+        print(selected_features)
+        
+        
+        # Crear DataFrame con importancia
+        test_importance = pd.DataFrame({
+            'feature': selected_features,
+            'importance': np.abs(br_model.coef_)
+        }).sort_values('importance', ascending=False)
+        
+        print("Todas als caracteristicas seleccionadas:")
+        print(test_importance)
+
+        feature_importance = test_importance.head(10)
+        print("Top 10 características más importantes:")
+        print(feature_importance)
+    else:
+        raise ValueError("Model structure doesn't match expected pipeline")
 
 # Preparar datos adicionales para visualizaciones
 # Distribución de precios
@@ -89,7 +121,7 @@ avg_price_by_quality = df.groupby('OverallQual')['SalePrice'].mean().reset_index
 avg_price_by_neighborhood = df.groupby('Neighborhood')['SalePrice'].mean().sort_values(ascending=False).reset_index().head(10)
 
 # Correlación entre variables numéricas y precio
-corr_with_price = df[selected_num_columns].corr()['SalePrice'].sort_values(ascending=False).drop('SalePrice')
+corr_with_price = df[numeric_columns].corr()['SalePrice'].sort_values(ascending=False).drop('SalePrice')
 
 # Variables más correlacionadas con el precio
 # Check which features are available in the dataset
@@ -274,7 +306,7 @@ app.layout = html.Div([
                     html.H3("Precio Real vs Predicho", style=title_style),
                     dcc.Graph(
                         figure=px.scatter(
-                            x=y_test, 
+                            x=y_test_original, 
                             y=y_pred,
                             labels={'x': 'Precio Real', 'y': 'Precio Predicho'},
                             opacity=0.7,
@@ -288,10 +320,10 @@ app.layout = html.Div([
                             yaxis=dict(title='Precio Predicho', tickprefix='$', tickformat=',')
                         ).add_shape(
                             type="line",
-                            x0=y_test.min(),
-                            y0=y_test.min(),
-                            x1=y_test.max(),
-                            y1=y_test.max(),
+                            x0=y_test_original.min(),
+                            y0=y_test_original.min(),
+                            x1=y_test_original.max(),
+                            y1=y_test_original.max(),
                             line=dict(
                                 color="#e74c3c",  # Changed to a bright red color
                                 width=3,          # Increased line width
@@ -418,12 +450,39 @@ app.layout = html.Div([
                             ),
                         ], style={'flex': '1'}),
                         
-                        # TotalBsmtSF
+                        # Neighborhood dropdown (replacing TotalBsmtSF)
                         html.Div([
-                            html.Label("TotalBsmtSF (Total Basement SF)", style={'fontWeight': 'bold', 'color': COLORS['text']}),
-                            dcc.Input(
-                                type='number', value=1000, id='totalbsmt-input',
-                                style={'width': '100%', 'padding': '8px', 'borderRadius': '4px', 'border': f'1px solid {COLORS["border"]}'}
+                            html.Label("Neighborhood", style={'fontWeight': 'bold', 'color': COLORS['text']}),
+                            dcc.Dropdown(
+                                id='neighborhood-dropdown',
+                                options=[
+                                    {'label': 'Blueste', 'value': 'Blueste'},
+                                    {'label': 'BrDale', 'value': 'BrDale'},
+                                    {'label': 'BrkSide', 'value': 'BrkSide'},
+                                    {'label': 'ClearCr', 'value': 'ClearCr'},
+                                    {'label': 'CollgCr', 'value': 'CollgCr'},
+                                    {'label': 'Crawfor', 'value': 'Crawfor'},
+                                    {'label': 'Edwards', 'value': 'Edwards'},
+                                    {'label': 'Gilbert', 'value': 'Gilbert'},
+                                    {'label': 'IDOTRR', 'value': 'IDOTRR'},
+                                    {'label': 'MeadowV', 'value': 'MeadowV'},
+                                    {'label': 'Mitchel', 'value': 'Mitchel'},
+                                    {'label': 'NAmes', 'value': 'NAmes'},
+                                    {'label': 'NPkVill', 'value': 'NPkVill'},
+                                    {'label': 'NWAmes', 'value': 'NWAmes'},
+                                    {'label': 'NoRidge', 'value': 'NoRidge'},
+                                    {'label': 'NridgHt', 'value': 'NridgHt'},
+                                    {'label': 'OldTown', 'value': 'OldTown'},
+                                    {'label': 'SWISU', 'value': 'SWISU'},
+                                    {'label': 'Sawyer', 'value': 'Sawyer'},
+                                    {'label': 'SawyerW', 'value': 'SawyerW'},
+                                    {'label': 'Somerst', 'value': 'Somerst'},
+                                    {'label': 'StoneBr', 'value': 'StoneBr'},
+                                    {'label': 'Timber', 'value': 'Timber'},
+                                    {'label': 'Veenker', 'value': 'Veenker'}
+                                ],
+                                value='NAmes',  # Default value
+                                style={'width': '100%', 'borderRadius': '4px'}
                             ),
                         ], style={'flex': '1'}),
                     ], style={'display': 'flex', 'gap': '20px', 'marginBottom': '20px'}),
@@ -479,25 +538,28 @@ app.layout = html.Div([
             html.H3("Información del Modelo", style=title_style),
             html.Div([
                 html.P([
-                    "Este dashboard utiliza un modelo XGBoost para predecir precios de viviendas basado en datos de Ames, Iowa. ",
-                    "El modelo fue entrenado con ", html.Strong(f"{len(X_train)} muestras"), " y evaluado con ", 
-                    html.Strong(f"{len(X_test)} muestras"), "."
+                    "Este dashboard utiliza un modelo Bayesian Ridge para predecir precios de viviendas basado en datos de Ames, Iowa."
+                ]),
+                
+                # Bayesian Ridge model information
+                html.P([
+                    "El modelo fue desarrollado utilizando MLflow para seguimiento de experimentos. ",
+                    "Este modelo aplica una transformación logarítmica al precio de venta para mejorar la distribución."
                 ]),
                 html.P([
-                    "Los parámetros del modelo incluyen: profundidad máxima de ", html.Strong(f"{best_params['max_depth']}"), 
-                    ", tasa de aprendizaje de ", html.Strong(f"{best_params['learning_rate']}"), 
-                    " y ", html.Strong(f"{best_params['n_estimators']} estimadores"), "."
+                    "El modelo incluye selección de características utilizando SelectFromModel con un umbral basado en la mediana ",
+                    "de los coeficientes absolutos."
                 ]),
                 html.P([
-                    "Las características más importantes para predecir el precio son la calidad general de la vivienda, ",
-                    "el área habitable sobre el suelo, y el número de coches que caben en el garaje."
+                    "Los hiperparámetros fueron optimizados mediante GridSearchCV con validación cruzada de 5 pliegues, ",
+                    "evaluando métricas como error cuadrático medio negativo y R²."
                 ])
             ], style={'backgroundColor': COLORS['light-accent'], 'padding': '15px', 'borderRadius': '5px'})
         ], style={**card_style, 'marginBottom': '15px'}),
         
         # Footer
         html.Div([
-            html.P("Dashboard de Análisis de Precios de Viviendas | Desarrollado con Dash y XGBoost", 
+            html.P("Dashboard de Análisis de Precios de Viviendas | Desarrollado con Dash y Bayesian Ridge", 
                    style={'textAlign': 'center', 'color': COLORS['text'], 'opacity': '0.7'})
         ], style={'marginTop': '10px'})
         
@@ -511,23 +573,34 @@ app.layout = html.Div([
     [Input('garage-cars-slider', 'value'),
      Input('overall-quality-slider', 'value'),
      Input('grlivarea-input', 'value'),
-     Input('totalbsmt-input', 'value'),
+     Input('neighborhood-dropdown', 'value'),
      Input('lotarea-input', 'value')]
 )
-def predict_price(garage_cars, overall_quality, grlivarea, totalbsmt, lotarea):
-    # Crear dataframe de entrada para el modelo
-    input_data = pd.DataFrame(columns=X.columns, data=np.zeros((1, len(X.columns))))
+def predict_price(garage_cars, overall_quality, grlivarea, neighborhood, lotarea):
+    # Create a dataframe with default values: median for numeric, mode for categorical
+    input_data = pd.DataFrame(index=[0], columns=X.columns)
+    
+    # Fill with median for numeric columns
+    for col in X.select_dtypes(include=['int64', 'float64']).columns:
+        input_data[col] = X[col].median()
+    
+    # Fill with mode for categorical columns
+    for col in X.select_dtypes(include=['object']).columns:
+        input_data[col] = X[col].mode()[0]
+    
+    # Update with user inputs
     input_data['GarageCars'] = garage_cars
     input_data['OverallQual'] = overall_quality
     input_data['GrLivArea'] = grlivarea
-    input_data['TotalBsmtSF'] = totalbsmt
+    input_data['Neighborhood'] = neighborhood # Neighborhood
     input_data['LotArea'] = lotarea
-
-    # Normalizar con el mismo scaler
-    input_scaled = scaler.transform(input_data)
-
-    # Predecir precio
-    predicted_price = model.predict(input_scaled)[0]
+    
+    # Predict price using the model
+    predicted_price_log = model.predict(input_data)[0]
+    
+    # Convert back to original scale
+    predicted_price = np.expm1(predicted_price_log)
+    
     return f"${predicted_price:,.2f}"
 
 # Add this callback for the interactive scatter plot
@@ -555,4 +628,4 @@ def update_scatter(selected_var):
 
 # Ejecutar la aplicación Dash
 if __name__ == '__main__':
-    app.run_server(debug=True, host='0.0.0.0', port=8050)
+    app.run_server(debug=True, host='0.0.0.0', port=8080)
