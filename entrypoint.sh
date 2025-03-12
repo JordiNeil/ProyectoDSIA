@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Remove existing /tmp/repo if it exists
+rm -rf /tmp/repo
+
 # Clone the repository
 echo "Cloning repository..."
 git clone https://github.com/JordiNeil/ProyectoDSIA.git /tmp/repo
