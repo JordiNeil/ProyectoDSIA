@@ -34,6 +34,7 @@ RUN chmod +x entrypoint.sh
 
 # Create data directory
 RUN mkdir -p data
+COPY data/ ./data/
 
 # Set environment variables
 ENV PORT=8080
