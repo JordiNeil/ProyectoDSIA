@@ -19,6 +19,19 @@ corr_features = ["SalePrice", "OverallQual", "GrLivArea", "GarageCars", "TotalBs
 corr_df = df[corr_features].corr()
 
 selected_num_columns = ['LotFrontage','LotArea','TotalBsmtSF','GrLivArea','SalePrice']
+##Se selecciona porque garage cars porque tiene mejor correlacion con saleprice y ambas estaban muy correlacionadas
+categorical_columns_filtered =  ['Street','LandContour',
+                    'LandSlope','Utilities','Neighborhood','Condition1',
+                    'Condition2','HouseStyle','BldgType','OverallQual',
+                    'OverallCond','RoofStyle','Exterior1st',
+                    'ExterCond', 'BsmtCond','BsmtFinType1','CentralAir',
+                    'Heating','KitchenQual','TotRmsAbvGrd', 'GarageType',
+                    'GarageCond','PavedDrive',
+                    'SaleType','SaleCondition','Fireplaces',
+                    'GarageCars',
+                    ]
+
+df = df[selected_num_columns + categorical_columns_filtered]
 
 # Función para crear el pairplot
 def create_pairplot(df, columns, hue_column):
