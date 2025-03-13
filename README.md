@@ -15,6 +15,8 @@ Maryi Alejandra Carvajal
 
 Una aplicación Dash para predecir precios de viviendas utilizando modelos de aprendizaje automático.
 
+# 🛠 Manual de instalación
+
 ## Despliegue en Railway
 
 Este proyecto está configurado para ser desplegado en Railway utilizando Docker.
@@ -114,3 +116,47 @@ docker run -p 8080:8080 \
 ```
 
 Luego accede a la aplicación en http://localhost:8080
+
+# 📖 Manual de Usuario
+
+## 1. Introducción
+
+Este dashboard está diseñado para ayudar a los usuarios a analizar y predecir precios de viviendas utilizando un modelo de **Bayesian Ridge Regressor**. Proporciona información clave sobre el rendimiento del modelo, la importancia de las variables, las correlaciones entre características y permite realizar predicciones interactivas.
+
+### 1.1 Objetivo del Dashboard
+El objetivo principal es facilitar la interpretación de los precios de viviendas y brindar herramientas visuales para comprender los factores más influyentes en la predicción.
+ 
+## 2. Secciones del Dashboard
+
+### 2.1 Métricas del Modelo
+Esta sección presenta las principales métricas del modelo:
+- **Error Cuadrático Medio (MSE):** Mide la diferencia entre los valores predichos y los valores reales.
+- **Coeficiente de Determinación (R²):** Indica la precisión del modelo en la predicción de precios.
+- **Errores Absolutos Medios (MAE y Mediana AE):** Representan el error medio entre la predicción y el precio real.
+
+### 2.2 Correlación con Precio
+Esta gráfica muestra la correlación entre las variables y el precio de la vivienda. Factores con alta correlación pueden indicar fuertes relaciones predictivas.
+
+### 2.3 Importancia de Características
+Presenta las variables más influyentes en la predicción de precios. 
+- **Ejemplo:** Si "Superficie" es la variable más importante, indica que el tamaño de la vivienda tiene un impacto significativo en el precio.
+
+### 2.4 Precio Real vs. Predicho
+Gráfico de dispersión que compara los valores predichos con los valores reales. Una línea de tendencia sugiere la precisión del modelo.
+
+### 2.5 Precio por Ciudad / Vecindario
+Visualización de los precios promedio en diferentes ciudades o vecindarios. Permite identificar zonas con precios más altos o bajos.
+
+### 2.6 Correlación entre Variables Clave
+Un mapa de calor que muestra las relaciones entre variables como "Tamaño", "Número de habitaciones" y "Precio".
+
+### 2.7 Predicción Interactiva
+Permite al usuario ingresar valores personalizados (ejemplo: número de habitaciones, calidad del vecindario) para obtener una predicción del precio con unas características predeterminadas.
+
+## 3. Conclusión
+
+El dashboard de predicción de precios de viviendas es una herramienta poderosa para analizar tendencias en el mercado inmobiliario y tomar decisiones informadas. Gracias a su enfoque visual y a la integración de modelos de aprendizaje automático, permite a usuarios de distintos niveles de experiencia comprender los factores que influyen en el precio de una propiedad.
+
+El modelo Bayesian Ridge Regressor ofrece un equilibrio entre precisión y robustez, asegurando predicciones confiables. Sin embargo, es importante recordar que ningún modelo es perfecto, y los resultados deben ser interpretados en conjunto con otros factores del mercado inmobiliario.
+
+Este manual ha sido diseñado para proporcionar una guía clara sobre cómo usar el dashboard y sacarle el máximo provecho. Se recomienda a los usuarios experimentar con las funcionalidades interactivas para obtener una comprensión más profunda de las dinámicas de precios en sus regiones de interés.
